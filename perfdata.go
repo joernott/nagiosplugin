@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math"
 	"strconv"
-	"strings"
 )
 
 // PerfDatum represents one metric to be reported as part of a check
@@ -27,16 +26,6 @@ func fmtPerfFloat(n float64) string {
 	return strconv.FormatFloat(n, 'f', -1, 64)
 }
 
-// validUnit returns true if the string is a valid UOM; otherwise false.
-// It is case-insensitive.
-func validUnit(unit string) bool {
-	switch strings.ToLower(unit) {
-	case "", "us", "ms", "s", "%", "b", "kb", "mb", "gb", "tb", "c":
-		return true
-	}
-	return false
-}
-
 // NewPerfDatum returns a PerfDatum object suitable to use in a check
 // result. unit must a valid Nagios unit, i.e., one of "us", "ms", "s",
 // "%", "b", "kb", "mb", "gb", "tb", "c", or the empty string.
@@ -49,9 +38,6 @@ func NewPerfDatum(label string, unit string, value float64, thresholds ...float6
 	datum.label = label
 	datum.value = value
 	datum.unit = unit
-	if !validUnit(unit) {
-		return nil, fmt.Errorf("Invalid unit %v", unit)
-	}
 	if math.IsInf(value, 0) || math.IsNaN(value) {
 		return nil, fmt.Errorf("Perfdata value may not be infinity or NaN: %v.", value)
 	}
