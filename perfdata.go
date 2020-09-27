@@ -27,8 +27,7 @@ func fmtPerfFloat(n float64) string {
 }
 
 // NewPerfDatum returns a PerfDatum object suitable to use in a check
-// result. unit must a valid Nagios unit, i.e., one of "us", "ms", "s",
-// "%", "b", "kb", "mb", "gb", "tb", "c", or the empty string.
+// result.
 //
 // Zero to four thresholds may be supplied: min, max, warn and crit.
 // Thresholds may be positive infinity, negative infinity, or NaN, in
@@ -84,7 +83,7 @@ func fmtThreshold(t *float64) string {
 // check output.
 func (p PerfDatum) String() string {
 	val := fmtPerfFloat(p.value)
-	value := fmt.Sprintf("%s=%s%s", p.label, val, p.unit)
+	value := fmt.Sprintf("'%s'=%s%s", p.label, val, p.unit)
 	value += fmt.Sprintf(";%s;%s", fmtThreshold(p.warn), fmtThreshold(p.crit))
 	value += fmt.Sprintf(";%s;%s", fmtThreshold(p.min), fmtThreshold(p.max))
 	return value
