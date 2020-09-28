@@ -19,10 +19,11 @@ func Exit(status Status, message string) {
 
 // Check represents the state of a Nagios check.
 type Check struct {
-	results      []Result
-	perfdata     []PerfDatum
-	status       Status
-	statusPolicy *statusPolicy
+	results          []Result
+	perfdata         []PerfDatum
+	status           Status
+	statusPolicy     *statusPolicy
+	longPluginOutput string
 }
 
 // CheckOptions contains knobs that modify default Check behaviour. See
@@ -83,6 +84,10 @@ func (c *Check) AddResultf(status Status, format string, v ...interface{}) {
 	c.AddResult(status, msg)
 }
 
+func (c *Check) AddLongPluginOutput(s string) {
+	c.longPluginOutput += s
+}
+
 // AddPerfDatum adds a metric to the set output by the check. unit must
 // be a valid Nagios unit of measurement (UOM): "us", "ms", "s",
 // "%", "b", "kb", "mb", "gb", "tb", "c", or the empty string. UOMs are
@@ -96,8 +101,8 @@ func (c *Check) AddResultf(status Status, format string, v ...interface{}) {
 // infinity.
 //
 // Returns error on invalid parameters.
-func (c *Check) AddPerfDatum(label, unit string, value float64, thresholds ...float64) error {
-	datum, err := NewPerfDatum(label, unit, value, thresholds...)
+func (c *Check) AddPerfDatum(label, unit string, value PerfDatumValue, warn, crit *Range, min, max *float64) error {
+	datum, err := NewPerfDatum(label, unit, value, warn, crit, min, max)
 	if err != nil {
 		return err
 	}
@@ -124,6 +129,9 @@ func (c Check) exitInfoText() string {
 // parsing by Nagios.
 func (c Check) String() string {
 	value := fmt.Sprintf("%v: %s", c.status, c.exitInfoText())
+	if len(c.longPluginOutput) != 0 {
+		value += fmt.Sprintf("\n%s", c.longPluginOutput)
+	}
 	value += RenderPerfdata(c.perfdata)
 	return value
 }
