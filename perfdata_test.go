@@ -7,7 +7,7 @@ import (
 
 func TestPerfdata(t *testing.T) {
 	expected := "'badness'=9003.4ms;4000;9000;10;"
-	pd, err := NewPerfDatum("badness", "ms", tNewFloatPerfDatumValue(t, 9003.4), tNewSimpleFrangeFromFloat(t, 0, 4000), tNewSimpleFrangeFromFloat(t, 0, 9000), newFloat64Ptr(10), nil)
+	pd, err := NewPerfDatum("badness", "ms", tNewFloatPerfDatumValue(t, 9003.4), tNewSimpleRangeFromFloat(t, 0, 4000), tNewSimpleRangeFromFloat(t, 0, 9000), newFloat64Ptr(10), nil)
 	if err != nil {
 		t.Errorf("Could not render perfdata: %v", err)
 	}
@@ -38,8 +38,8 @@ func TestRenderPerfdataWithOmissions(t *testing.T) {
 		"age",                             // label
 		"s",                               // UOM
 		tNewFloatPerfDatumValue(t, 0.123), // value
-		tNewSimpleFrangeFromFloat(t, 0, math.NaN()), // warn: NaN -> omit
-		tNewSimpleFrangeFromFloat(t, 0, 0.5),        // crit
+		tNewSimpleRangeFromFloat(t, 0, math.NaN()), // warn: NaN -> omit
+		tNewSimpleRangeFromFloat(t, 0, 0.5),        // crit
 		newFloat64Ptr(0.0),                          // min
 		newFloat64Ptr(math.Inf(1)))                  // max: +Inf -> omit
 	if err != nil {
