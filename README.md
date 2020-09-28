@@ -46,7 +46,7 @@ func main() {
         }
 
         check.AddPerfDatum("/home", "MB", value, warn, crit,
-                nil, nil)
+                nil /* min */, nil /* max */)
 }
 ```
 
