@@ -91,3 +91,12 @@ func (r *Range) CheckInt(val int) bool {
 func (r *Range) CheckUint64(val uint64) bool {
 	return r.Check(float64(val))
 }
+
+func (r *Range) String() string {
+	var s string
+	if r.AlertOnInside {
+		s = "@"
+	}
+	s += fmt.Sprintf("%s:%s", fmtPerfFloat(r.Start), fmtPerfFloat(r.End))
+	return s
+}
