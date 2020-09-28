@@ -19,6 +19,8 @@ type Range struct {
 	AlertOnInside bool
 }
 
+// NewSimpleRangeFromFloat returns a new range object
+// based on the two float values that were supplied
 func NewSimpleRangeFromFloat(start, end float64) (*Range, error) {
 	return ParseRange(fmt.Sprintf("%f:%f", start, end))
 }
