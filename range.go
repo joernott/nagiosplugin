@@ -19,7 +19,7 @@ type Range struct {
 	AlertOnInside bool
 }
 
-func NewSimpleFrangeFromFloat(start, end float64) (*Range, error) {
+func NewSimpleRangeFromFloat(start, end float64) (*Range, error) {
 	return ParseRange(fmt.Sprintf("%f:%f", start, end))
 }
 
