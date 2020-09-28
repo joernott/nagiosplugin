@@ -72,6 +72,8 @@ func NewPerfDatum(label string, unit string, value PerfDatumValue, warn, crit *R
 	datum.unit = unit
 	datum.warn = warn
 	datum.crit = crit
+	datum.min = min
+	datum.max = max
 	return datum, nil
 }
 
@@ -89,10 +91,10 @@ func (p PerfDatum) String() string {
 	}
 
 	var min, max string
-	if p.min != nil {
+	if p.min != nil && !math.IsInf(*p.min, -1) {
 		min = fmtPerfFloat(*p.min)
 	}
-	if p.max != nil {
+	if p.max != nil && !math.IsInf(*p.max, 1) {
 		max = fmtPerfFloat(*p.max)
 	}
 

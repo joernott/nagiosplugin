@@ -6,7 +6,7 @@ Package for writing Nagios/Icinga/et cetera plugins in Go (golang).
 
 # Documentation
 
-See http://godoc.org/github.com/olorin/nagiosplugin. 
+See http://godoc.org/github.com/olorin/nagiosplugin.
 
 # Usage example
 
@@ -14,30 +14,39 @@ The general usage pattern looks like this:
 
 ```go
 func main() {
-	// Initialize the check - this will return an UNKNOWN result
-	// until more results are added.
-	check := nagiosplugin.NewCheck()
-	// If we exit early or panic() we'll still output a result.
-	defer check.Finish()
+        // Initialize the check - this will return an UNKNOWN result
+        // until more results are added.
+        check := nagiosplugin.NewCheck()
+        // If we exit early or panic() we'll still output a result.
+        defer check.Finish()
 
-	// obtain data here
+        // obtain data here
 
-	// Add an 'OK' result - if no 'worse' check results have been
-	// added, this is the one that will be output.
-	check.AddResult(nagiosplugin.OK, "everything looks shiny, cap'n")
-	// Add some perfdata too (label, unit, value, min, max,
-	// warn, crit). The math.Inf(1) will be parsed as 'no
-	// maximum'.
-	check.AddPerfDatum("badness", "kb", 3.14159, 0.0, math.Inf(1), 8000.0, 9000.0)
+        check.AddResult(nagiosplugin.OK, "everything looks shiny, cap'n")
 
-	// Parse a range from the command line and warn on a match.
-	warnRange, err := nagiosplugin.ParseRange( "1:2" )
-	if err != nil {
-		check.AddResult(nagiosplugin.UNKNOWN, "error parsing warning range")
-	}
-	if warnRange.Check( 3.14159 ) {
-		check.AddResult(nagiosplugin.WARNING, "Are we crashing again?")
-	}
+        check.AddLongPluginOutput("Lorem Ipsum\nfoo,bar\n")
+
+        // Parse a range from the command line and warn on a match.
+        warn, err := nagiosplugin.ParseRange("1:2")
+        if err != nil {
+                check.AddResult(nagiosplugin.UNKNOWN, "error parsing warning range")
+        }
+        if warn.Check( 3.14159 ) {
+                check.AddResult(nagiosplugin.WARNING, "Are we crashing again?")
+        }
+
+        crit, err := nagiosplugin.ParseRange("253414")
+        if err != nil {
+                panic(err)
+        }
+
+        value, err := nagiosplugin.NewFloatPerfDatumValue(253404)
+        if err != nil {
+                panic(err)
+        }
+
+        check.AddPerfDatum("/home", "MB", value, warn, crit,
+                nil, nil)
 }
 ```
 
@@ -45,14 +54,14 @@ In the example above, multiple results were added to the check with `AddResult()
 
 ```go
 func main() {
-	check := nagiosplugin.NewCheckWithOptions(nagiosplugin.CheckOptions{
-		// OK -> UNKNOWN -> WARNING -> CRITICAL
-		StatusPolicy: nagiosplugin.NewOUWCStatusPolicy(),
-	})
-	defer check.Finish()
+        check := nagiosplugin.NewCheckWithOptions(nagiosplugin.CheckOptions{
+                // OK -> UNKNOWN -> WARNING -> CRITICAL
+                StatusPolicy: nagiosplugin.NewOUWCStatusPolicy(),
+        })
+        defer check.Finish()
 
-	// Now, any WARNING or CRITICAL results added to the check will be
-	// considered more severe than any UNKNOWN result.
+        // Now, any WARNING or CRITICAL results added to the check will be
+        // considered more severe than any UNKNOWN result.
 }
 ```
 

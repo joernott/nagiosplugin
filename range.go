@@ -19,6 +19,10 @@ type Range struct {
 	AlertOnInside bool
 }
 
+func NewSimpleFrangeFromFloat(start, end float64) (*Range, error) {
+	return ParseRange(fmt.Sprintf("%f:%f", start, end))
+}
+
 // ParseRange returns a new range object and nil if the given range definition was
 // valid, or nil and an error if it was invalid.
 func ParseRange(rangeStr string) (*Range, error) {
@@ -97,6 +101,11 @@ func (r *Range) String() string {
 	if r.AlertOnInside {
 		s = "@"
 	}
-	s += fmt.Sprintf("%s:%s", fmtPerfFloat(r.Start), fmtPerfFloat(r.End))
+	if r.Start != 0 && !math.IsNaN(r.Start) {
+		s += fmt.Sprintf("%s:", fmtPerfFloat(r.Start))
+	}
+	if !math.IsNaN(r.End) {
+		s += fmt.Sprintf("%s", fmtPerfFloat(r.End))
+	}
 	return s
 }

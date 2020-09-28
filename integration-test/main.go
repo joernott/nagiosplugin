@@ -18,10 +18,8 @@ func main() {
 	defer check.Finish()
 
 	check.AddResult(nagiosplugin.OK, "everything looks shiny, cap'n")
-	check.AddResult(nagiosplugin.OK, "cool")
 
-	//check.AddLongPluginOutput("Lorem Ipsum\nfoo,bar\noto")
-	// /home=69357MB;253404;253409;0;253414
+	check.AddLongPluginOutput("Lorem Ipsum\nfoo,bar\n")
 
 	warn, err := nagiosplugin.ParseRange("0")
 	if err != nil {
