@@ -1,3 +1,3 @@
-module github.com/riton/nagiosplugin/v2
+module github.com/joernott/nagiosplugin
 
-go 1.14
+go 1.16

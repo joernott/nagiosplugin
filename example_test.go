@@ -3,7 +3,7 @@ package nagiosplugin_test
 import (
 	"math"
 
-	"github.com/riton/nagiosplugin"
+	"github.com/joernott/nagiosplugin"
 )
 
 func ExampleExit() {
