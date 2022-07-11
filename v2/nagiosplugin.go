@@ -6,5 +6,5 @@ package nagiosplugin
 
 const (
 	// Version is the package version.
-	Version = "1.1.0"
+	Version = "1.2.0"
 )

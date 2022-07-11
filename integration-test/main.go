@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/riton/nagiosplugin"
+	"github.com/joernott/nagiosplugin"
 )
 
 func main() {

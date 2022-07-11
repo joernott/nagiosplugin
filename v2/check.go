@@ -6,10 +6,6 @@ import (
 	"strings"
 )
 
-const (
-	messageSeparator = ", "
-)
-
 // Exit is a standalone exit function for simple checks without multiple results
 // or perfdata.
 func Exit(status Status, message string) {
@@ -24,6 +20,9 @@ type Check struct {
 	status           Status
 	statusPolicy     *statusPolicy
 	longPluginOutput string
+	verbosity        int
+	messageSeparator string
+	minimalResults   [4]string
 }
 
 // CheckOptions contains knobs that modify default Check behaviour. See
@@ -50,6 +49,9 @@ type CheckOptions struct {
 func NewCheck() *Check {
 	c := new(Check)
 	c.statusPolicy = NewDefaultStatusPolicy()
+	c.verbosity = VERBOSITY_SINGLE_LINE
+	c.messageSeparator = ", "
+	c.minimalResults = [4]string{"OK: Everything is fine", "WARNING: Reached warning threshold", "CRITICAL: Reached critical threshold","UNKNOWN: Check error"}
 	return c
 }
 
@@ -116,13 +118,18 @@ func (c *Check) AddPerfDatum(label, unit string, value PerfDatumValue, warn, cri
 // Returns joined string of (messageSeparator-separated) info text from
 // results which have a status of at least c.status.
 func (c Check) exitInfoText() string {
-	var importantMessages []string
-	for _, result := range c.results {
-		if result.status == c.status {
-			importantMessages = append(importantMessages, result.message)
+	switch c.verbosity {
+	case VERBOSITY_MINIMAL:
+		return c.minimalResults[c.status]
+	default:
+		var importantMessages []string
+		for _, result := range c.results {
+			if result.status == c.status {
+				importantMessages = append(importantMessages, result.message)
+			}
 		}
+		return strings.Join(importantMessages, c.messageSeparator)	
 	}
-	return strings.Join(importantMessages, messageSeparator)
 }
 
 // String representation of the check results, suitable for output and

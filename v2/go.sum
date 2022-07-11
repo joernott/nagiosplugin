@@ -1,4 +1,2 @@
-github.com/olorin/nagiosplugin v1.2.0 h1:WmwKsepdCY11CNwVkbSwFHHRfeb/gSktOPfjmgjt9tQ=
-github.com/olorin/nagiosplugin v1.2.0/go.mod h1:/KnG+YnByojJ3D2OuoiOIzWwnN0yn3eNWLYnyVEDsHU=
-github.com/riton/nagiosplugin v1.2.0 h1:sOfsthWC5sRZWc1h0CCxAclfx0YBvYuFxv6wT+ckQIA=
-github.com/riton/nagiosplugin v1.2.0/go.mod h1:gBs8XRYfyqBHh/CyoSUT1J6DFU9L7a9JmQvdPgFGy+E=
+github.com/joernott/nagiosplugin v2.0.0+incompatible h1:fnUzPmskMlNwfVwVSa3tbKnLMO/fsUGeLsrCYeqrL84=
+github.com/joernott/nagiosplugin v2.0.0+incompatible/go.mod h1:gssffP3SUqSGk5ns25uud91WiFuo04ZdGCcvM0y0kgY=
