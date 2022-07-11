@@ -1,7 +1,3 @@
-module github.com/joernott/nagiosplugin/v2
+module github.com/joernott/nagiosplugin
 
 go 1.16
-
-require (
-	github.com/joernott/nagiosplugin v2.0.0+incompatible
-)
