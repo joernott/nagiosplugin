@@ -87,7 +87,7 @@ func (c *Check) AddResultf(status Status, format string, v ...interface{}) {
 }
 
 func (c *Check) AddLongPluginOutput(s string) {
-	c.longPluginOutput += s
+	c.longPluginOutput += s+c.messageSeparator
 }
 
 // AddPerfDatum adds a metric to the set output by the check. unit must
