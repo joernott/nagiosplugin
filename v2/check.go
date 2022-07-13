@@ -51,7 +51,7 @@ func NewCheck() *Check {
 	c.statusPolicy = NewDefaultStatusPolicy()
 	c.verbosity = VERBOSITY_SINGLE_LINE
 	c.messageSeparator = ", "
-	c.minimalResults = [4]string{"OK: Everything is fine", "WARNING: Reached warning threshold", "CRITICAL: Reached critical threshold","UNKNOWN: Check error"}
+	c.minimalResults = [4]string{"OK: Everything is fine", "WARNING: Reached warning threshold", "CRITICAL: Reached critical threshold", "UNKNOWN: Check error"}
 	return c
 }
 
@@ -87,7 +87,7 @@ func (c *Check) AddResultf(status Status, format string, v ...interface{}) {
 }
 
 func (c *Check) AddLongPluginOutput(s string) {
-	c.longPluginOutput += s+c.messageSeparator
+	c.longPluginOutput += s + c.messageSeparator
 }
 
 // AddPerfDatum adds a metric to the set output by the check. unit must
@@ -117,29 +117,36 @@ func (c *Check) AddPerfDatum(label, unit string, value PerfDatumValue, warn, cri
 //
 // Returns joined string of (messageSeparator-separated) info text from
 // results which have a status of at least c.status.
-func (c Check) exitInfoText() string {
+func (c Check) exitInfoText(perfdata string) string {
 	switch c.verbosity {
 	case VERBOSITY_MINIMAL:
-		return c.minimalResults[c.status]
+		return c.minimalResults[c.status] + perfdata
 	default:
 		var importantMessages []string
+		first := true
 		for _, result := range c.results {
 			if result.status == c.status {
-				importantMessages = append(importantMessages, result.message)
+				if first {
+					importantMessages = append(importantMessages, result.message+perfdata)
+					first = false
+				} else {
+					importantMessages = append(importantMessages, result.message)
+				}
 			}
 		}
-		return strings.Join(importantMessages, c.messageSeparator)	
+		return strings.Join(importantMessages, c.messageSeparator)
 	}
 }
 
 // String representation of the check results, suitable for output and
 // parsing by Nagios.
 func (c Check) String() string {
-	value := fmt.Sprintf("%v: %s", c.status, c.exitInfoText())
+	perfdata := RenderPerfdata(c.perfdata)
+	value := fmt.Sprintf("%v: %s", c.status, c.exitInfoText(perfdata))
+
 	if len(c.longPluginOutput) != 0 {
 		value += fmt.Sprintf("\n%s", c.longPluginOutput)
 	}
-	value += RenderPerfdata(c.perfdata)
 	return value
 }
 

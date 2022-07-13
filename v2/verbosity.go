@@ -4,6 +4,7 @@ import (
 	"errors"
 )
 
+// https://nagios-plugins.org/doc/guidelines.html#AEN41
 const (
 	VERBOSITY_MINIMAL int = iota
 	VERBOSITY_SINGLE_LINE

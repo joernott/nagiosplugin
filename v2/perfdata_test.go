@@ -40,8 +40,8 @@ func TestRenderPerfdataWithOmissions(t *testing.T) {
 		tNewFloatPerfDatumValue(t, 0.123), // value
 		tNewSimpleRangeFromFloat(t, 0, math.NaN()), // warn: NaN -> omit
 		tNewSimpleRangeFromFloat(t, 0, 0.5),        // crit
-		newFloat64Ptr(0.0),                          // min
-		newFloat64Ptr(math.Inf(1)))                  // max: +Inf -> omit
+		newFloat64Ptr(0.0),                         // min
+		newFloat64Ptr(math.Inf(1)))                 // max: +Inf -> omit
 	if err != nil {
 		t.Errorf("Could not create perfdata: %v", err)
 	}
